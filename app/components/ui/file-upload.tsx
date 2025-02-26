@@ -58,7 +58,7 @@ export const FileUpload = ({
       <motion.div
         onClick={handleClick}
         whileHover="animate"
-        className="p-4 sm:p-6 md:p-10 group/file block rounded-lg cursor-pointer w-full relative overflow-hidden"
+        className="pb-4 sm:pb-6 md:pb-10 group/file block rounded-lg cursor-pointer w-full relative overflow-hidden"
       >
         <input
           ref={fileInputRef}
@@ -71,13 +71,13 @@ export const FileUpload = ({
           <GridPattern />
         </div>
         <div className="flex flex-col items-center justify-center">
-          <p className="relative z-20 font-sans font-bold text-neutral-700 dark:text-neutral-300 text-base sm:text-lg">
+          <p className="z-20 font-sans text-center whitespace-nowrap font-bold text-neutral-700 dark:text-neutral-300 text-base sm:text-lg">
             Upload file
           </p>
-          <p className="relative z-20 font-sans font-normal text-neutral-400 dark:text-neutral-400 text-sm sm:text-base mt-2 text-center">
+          <p className="z-20 font-sans font-semibold text-neutral-400 dark:text-neutral-400 text-sm sm:text-base mt-2 ">
             Drag or drop your files here or tap to upload
           </p>
-          <div className="relative w-full mt-6 sm:mt-10 max-w-xl mx-auto">
+          <div className="relative w-full mt-6 sm:mt-10 max-w-4xl mx-auto">
             {files.length > 0 &&
               files.map((file, idx) => (
                 <motion.div
@@ -133,7 +133,7 @@ export const FileUpload = ({
                   damping: 20,
                 }}
                 className={cn(
-                  "relative group-hover/file:shadow-2xl z-40 bg-white dark:bg-neutral-900 flex items-center justify-center h-24 sm:h-32 mt-4 w-full max-w-[6rem] sm:max-w-[8rem] mx-auto rounded-md",
+                  "relative group-hover/file:shadow-2xl z-40 bg-white dark:bg-neutral-900 flex items-center justify-center h-24 sm:h-32 mt-4 w-full max-w-[9rem] sm:max-w-[9rem] mx-auto rounded-md",
                   "shadow-[0px_10px_50px_rgba(0,0,0,0.1)]",
                 )}
               >

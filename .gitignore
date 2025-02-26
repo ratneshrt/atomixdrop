@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+app/components/Dock.tsx
+app/components/ui/floating-dock.tsx

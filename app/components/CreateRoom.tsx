@@ -1,17 +1,17 @@
-'use client'
+import React from "react";
+import { TypewriterEffect } from "./TypeWriter";
 
-import { v1 as uuid} from 'uuid'
-import { useRouter } from 'next/navigation'
-
-export function CreateRoom(){
-    const router = useRouter()
-
-    const handleCreate = () =>  {
-        const id = uuid()
-        router.push(`room?id=${id}`)
-    }
-
-    return (
-        <button onClick={handleCreate} className='px-4 py-2 bg-blue-500 text-white rounded-md'>Create Room</button>
-    )
+export function CreateRoom() {
+  return (
+    <div className="h-[50rem] w-full dark:bg-black bg-white  dark:bg-grid-white/[0.2] bg-grid-black/[0.2] relative flex items-center justify-center">
+      {/* Radial gradient for the container to give a faded look */}
+      <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+      <div>
+        <p className="flex items-center justify-center text-4xl sm:text-7xl font-bold relative z-20 py-8 bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500">
+          atomixDrop
+        </p>
+        <TypewriterEffect></TypewriterEffect>
+      </div>
+    </div>
+  );
 }

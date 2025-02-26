@@ -1,7 +1,11 @@
 import { Room } from "@/app/components/Room";
+import { NavBar } from "../components/NavBar";
 
 export default function(){
     return (
-        <Room></Room>
+        <>
+            <NavBar></NavBar>
+            <Room></Room>
+        </>
     )
 }

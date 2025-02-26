@@ -5,6 +5,9 @@ import { io, Socket } from "socket.io-client"
 import Peer from 'simple-peer'
 import { useSearchParams } from "next/navigation"
 import { Suspense } from "react"
+import { UploadFile } from "./FileUpload"
+import { FileUpload } from "./ui/file-upload"
+import { Waiting } from "./Waiting"
 
 export function Room(){
   return (
@@ -159,9 +162,9 @@ function RoomComp(){
     }, { once: true })
   }
 
-  const selectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(e.target.files && e.target.files.length > 0){
-      setFile(e.target.files[0]) 
+  const selectFile = (files: File[]) => {
+    if(files.length > 0){
+      setFile(files[0]) 
     }
   }
 
@@ -218,19 +221,13 @@ function RoomComp(){
   }
 
   return (
-    <main>
-      {/* {roomID} */}
-      {connection && (
+    <main className="bg-black">
+      {connection ? (
         <div>
-          <input onChange={selectFile} type="file"></input>
-          <button onClick={sendFile}>Send File</button>
+          <UploadFile onClick={sendFile} onFileUpload={selectFile} gotFile={gotFile} fileName={fileName} onDownload={download}></UploadFile>
+          
         </div>
-      )}
-      {gotFile && (<>
-        <p>{fileName}</p>
-        <button onClick={download}>Download</button>
-        </>
-      )}
+      ) : <main className="bg-black h-screen w-screen"><Waiting roomId={roomID || ""}></Waiting></main>}
     </main>
   )
 }

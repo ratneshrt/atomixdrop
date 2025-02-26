@@ -1,7 +1,12 @@
-import { CreateRoom } from './components/CreateRoom'
+import { CreateRoom } from "./components/CreateRoom";
+import { Dock } from "./components/Dock";
+import { NavBar } from "./components/NavBar";
 
-export default function Home() {
+export default function() {
   return (
-    <CreateRoom></CreateRoom>
-  );
+    <>
+      <NavBar></NavBar>
+      <CreateRoom></CreateRoom>
+    </>
+  )
 }

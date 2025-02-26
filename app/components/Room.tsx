@@ -4,6 +4,15 @@ import { useEffect, useRef, useState } from "react"
 import { io, Socket } from "socket.io-client"
 import Peer from 'simple-peer'
 import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
+
+export function Room(){
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RoomComp></RoomComp>
+    </Suspense>
+  )
+}
 
 interface Payload{
   signal: any,
@@ -15,7 +24,7 @@ interface SignalPayload{
   target: string
 }
 
-export function Room(){
+function RoomComp(){
   const [connection, setConnection] = useState(false)
   const [file, setFile] = useState<File>()
   const [gotFile, setGotFile] = useState(false)
@@ -27,12 +36,13 @@ export function Room(){
   const peerRef = useRef<Peer.Instance | null>(null)
   const roomID = useSearchParams().get('id')
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL
   
   useEffect(() => {
     workerRef.current = new Worker(
       new URL('../utils/worker.js', import.meta.url)
     )
-    socketRef.current = io('http://localhost:8080')
+    socketRef.current = io(url as string)
     
     socketRef.current.emit('join room', roomID)
     
@@ -209,7 +219,7 @@ export function Room(){
 
   return (
     <main>
-      {roomID}
+      {/* {roomID} */}
       {connection && (
         <div>
           <input onChange={selectFile} type="file"></input>

@@ -38,6 +38,9 @@ function RoomComp(){
   const socketRef = useRef<Socket | null>(null)
   const peerRef = useRef<Peer.Instance | null>(null)
   const roomID = useSearchParams().get('id')
+  const [progress, setProgress] = useState(0)
+  const [transferSpeed, setTransferSpeed] = useState(0)
+  const [startTime, setStartTime] = useState<number | null>(null)
 
   const url = process.env.NEXT_PUBLIC_BACKEND_URL
   
@@ -177,6 +180,7 @@ function RoomComp(){
     const peer = peerRef.current
     const fileReader = new FileReader()
     let offset = 0
+    setStartTime(Date.now())
 
     handleReading()
 
@@ -193,6 +197,18 @@ function RoomComp(){
           peer.write(chunkBuffer)
           
           offset += e.target.result.byteLength
+          
+          if(!file?.size){
+            return
+          }
+
+          const newProgress = (offset / file?.size) * 100
+          setProgress(newProgress)
+
+          const currentTime = Date.now()
+          const elaspsedTime = (currentTime - (startTime || currentTime))
+          const speed = offset / 1024 / elaspsedTime
+          setTransferSpeed(speed)
 
           if(file?.size){
             if(offset < file?.size){
@@ -203,6 +219,8 @@ function RoomComp(){
                 done: true,
                 fileName: file.name
               }))
+              setProgress(100)
+              setTransferSpeed(0)
             }
           }
         }
@@ -224,7 +242,7 @@ function RoomComp(){
     <main className="bg-black">
       {connection ? (
         <div>
-          <UploadFile onClick={sendFile} onFileUpload={selectFile} gotFile={gotFile} fileName={fileName} onDownload={download}></UploadFile>
+          <UploadFile onClick={sendFile} onFileUpload={selectFile} gotFile={gotFile} fileName={fileName} onDownload={download} progress={progress} transferSpeed={transferSpeed}></UploadFile>
           
         </div>
       ) : <main className="bg-black h-screen w-screen"><Waiting roomId={roomID || ""}></Waiting></main>}

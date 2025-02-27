@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AtomixDrop
 
-## Getting Started
+AtomixDrop is a decentralized peer-to-peer (P2P) file-sharing web application built using Next.js, Tailwind CSS, Socket.IO, and WebRTC. The app enables users to transfer files directly between peers without relying on a central server for file storage.
 
-First, run the development server:
+## Features
+- **Instant Room Creation**: A unique room is automatically created when a user visits the app.
+- **WebRTC-based P2P File Transfer**: Ensures secure and fast file sharing directly between peers.
+- **WebSocket Signaling**: Uses WebSocket for efficient connection establishment between peers.
+- **Real-Time File Transfer Progress**: Displays transfer speed and progress in real-time.
+- **Simple UI**: Built with Tailwind CSS for a sleek and minimal design.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack
+- **Frontend**: Next.js, React, Tailwind CSS
+- **Backend**: Socket.IO for signaling
+- **P2P Communication**: WebRTC
+- **State Management**: React Hooks
+- **Worker Threads**: For handling file transfers efficiently
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Installation
+### Prerequisites
+- Node.js >= 16
+- npm or yarn
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Steps to Run Locally
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/atomixdrop.git
+   cd atomixdrop
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Set up environment variables:
+   Create a `.env.local` file and add the following:
+   ```sh
+   NEXT_PUBLIC_BACKEND_URL=http://localhost:5000
+   ```
+4. Run the development server:
+   ```sh
+   npm run dev
+   ```
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## How It Works
+1. A unique room ID is generated when a user visits the site.
+2. The user can share the room link with another peer.
+3. When the second user joins, a WebRTC peer-to-peer connection is established.
+4. The sender selects a file, and the transfer begins.
+5. The recipient can download the received file after the transfer completes.
 
-## Learn More
+## License
+This project is licensed under the MIT License.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Feel free to contribute and enhance AtomixDrop!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

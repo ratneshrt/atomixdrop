@@ -79,7 +79,7 @@ function RoomComp(){
     console.log('Peer 1 created')
     const peer = new Peer({
       initiator: true,
-      trickle: false
+      trickle: true
     })
 
     peer.on('connect', () => {
@@ -106,7 +106,7 @@ function RoomComp(){
     console.log('Peer 2 added', incomingSignal)
     const peer = new Peer({
       initiator: false,
-      trickle: false
+      trickle: true
     })
 
     peer.on('connect', () => {
@@ -176,7 +176,7 @@ function RoomComp(){
       console.error('No file selected or peer connection not established')
       return
     }
-    const CHUNK_SIZE = 65536
+    const CHUNK_SIZE = 65536 //64KB
     const BATCH_SIZE = 4
     const peer = peerRef.current
     const fileReader = new FileReader()

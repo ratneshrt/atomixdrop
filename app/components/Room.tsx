@@ -79,7 +79,7 @@ function RoomComp(){
     console.log('Peer 1 created')
     const peer = new Peer({
       initiator: true,
-      trickle: true
+      trickle: false
     })
 
     peer.on('connect', () => {
@@ -178,7 +178,6 @@ function RoomComp(){
     }
     const CHUNK_SIZE = 65536
     const BATCH_SIZE = 4
-    let batch: any = []
     const peer = peerRef.current
     const fileReader = new FileReader()
     let offset = 0
@@ -187,22 +186,29 @@ function RoomComp(){
     handleReading()
 
     function handleReading(){
+      let bacthCounter = 0
+      let batchBuffer: Uint8Array[] = []
 
       fileReader.addEventListener('load', (e) => {
         if(e && e.target && e.target.result && e.target.result instanceof ArrayBuffer){
           const arrayBuffer = e.target.result
           const chunkBuffer = new Uint8Array(arrayBuffer)
-          batch.push(chunkBuffer)
 
-          peer.on('connect', () => {
-            console.log('Peer connection established')
-            setConnection(true)
-          })
+          batchBuffer.push(chunkBuffer)
+          bacthCounter++
 
-          if(batch.length >= BATCH_SIZE){
-            peer.write(new Uint8Array(batch.flat())) 
-            batch = []
+          // peer.on('connect', () => {
+          //   console.log('Peer connection established')
+          //   setConnection(true)
+          // })
+
+          if(bacthCounter === BATCH_SIZE){
+            peer.write(Buffer.concat(batchBuffer))
+            batchBuffer = []
+            bacthCounter = 0
           }
+
+          // peer.write(chunkBuffer)
           
           offset += e.target.result.byteLength
           
@@ -218,21 +224,20 @@ function RoomComp(){
           const speed = offset / 1024 / elaspsedTime
           setTransferSpeed(speed)
 
-          if(file?.size){
-            if(offset < file?.size){
-              readSliceBlob(offset)
-            }else{
-              console.log('Data sent', file)
-              if(batch.length > 0){
-                peer.write(new Uint8Array(batch.flat()))
-              }
-              peer?.write(JSON.stringify({
-                done: true,
-                fileName: file.name
-              }))
-              setProgress(100)
-              setTransferSpeed(0)
+          if(file.size && offset < file.size){
+            readSliceBlob(offset)
+          }else{
+            if(batchBuffer.length > 0){
+              peer.write(Buffer.concat(batchBuffer))
             }
+
+            console.log("Data sent", file)
+            peer.write(JSON.stringify({
+              done: true,
+              fileName: file.name
+            }))
+            setProgress(100)
+            setTransferSpeed(0)
           }
         }
       })
@@ -245,7 +250,7 @@ function RoomComp(){
         fileReader.readAsArrayBuffer(sliceBlob)
       }
 
-      readSliceBlob(offset)
+      readSliceBlob(0)
     }
   }
 

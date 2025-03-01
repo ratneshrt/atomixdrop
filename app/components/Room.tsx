@@ -79,7 +79,7 @@ function RoomComp(){
     console.log('Peer 1 created')
     const peer = new Peer({
       initiator: true,
-      trickle: false
+      trickle: true
     })
 
     peer.on('connect', () => {
@@ -176,7 +176,9 @@ function RoomComp(){
       console.error('No file selected or peer connection not established')
       return
     }
-    const CHUNK_SIZE = 16384
+    const CHUNK_SIZE = 65536
+    const BATCH_SIZE = 4
+    let batch: any = []
     const peer = peerRef.current
     const fileReader = new FileReader()
     let offset = 0
@@ -190,11 +192,17 @@ function RoomComp(){
         if(e && e.target && e.target.result && e.target.result instanceof ArrayBuffer){
           const arrayBuffer = e.target.result
           const chunkBuffer = new Uint8Array(arrayBuffer)
+          batch.push(chunkBuffer)
+
           peer.on('connect', () => {
             console.log('Peer connection established')
             setConnection(true)
           })
-          peer.write(chunkBuffer)
+
+          if(batch.length >= BATCH_SIZE){
+            peer.write(new Uint8Array(batch.flat())) 
+            batch = []
+          }
           
           offset += e.target.result.byteLength
           
@@ -215,6 +223,9 @@ function RoomComp(){
               readSliceBlob(offset)
             }else{
               console.log('Data sent', file)
+              if(batch.length > 0){
+                peer.write(new Uint8Array(batch.flat()))
+              }
               peer?.write(JSON.stringify({
                 done: true,
                 fileName: file.name
@@ -234,7 +245,7 @@ function RoomComp(){
         fileReader.readAsArrayBuffer(sliceBlob)
       }
 
-      readSliceBlob(0)
+      readSliceBlob(offset)
     }
   }
 

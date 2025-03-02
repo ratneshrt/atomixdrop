@@ -6,12 +6,12 @@ import Peer from 'simple-peer'
 import { useSearchParams } from "next/navigation"
 import { Suspense } from "react"
 import { UploadFile } from "./FileUpload"
-import { FileUpload } from "./ui/file-upload"
 import { Waiting } from "./Waiting"
+import { Loading } from "./Loading"
 
 export function Room(){
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div><Loading></Loading></div>}>
       <RoomComp></RoomComp>
     </Suspense>
   )
